@@ -1,0 +1,18 @@
+sudo: required
+language: generic
+services:
+- docker
+script:
+- docker build -t builder .
+- mkdir output
+- docker run --volume $(pwd)/output:/output --env BUILD=$(git describe) --env OUTPUT=/output builder
+deploy:
+  provider: releases
+  skip_cleanup: true
+  file_glob: true
+  file: "output/*.deb"
+  api_key:
+    secure: QoJDeHN8TMN/dBwTBdmowVzZGw2oqJJgMP0xkpomFnhqjxwqODUlkC3qjFmuEXjn4UJzG56/pot8ULgcFxHs7TC8Mkpz7u0+WQ8+ThdkQCxg6pOtWlz5k5oGZ2K38Sr7yoDmlGImORv4EvU5pLx1O51EJrOhtkbN4FmBYgzrp9hi8F+16Rr6BQRtvhTFyYeNVSZIOKJ3J0iHkDN/wtrFFhu1rDYJOo3ijmLzC/PepcvQ14mmQI7ZMtcj/1Ub/KB0aojaiVcvo8kvU0fvRBPhWfdTrqh53+FzVUqvoL61e3izFsvW0uimVu9l6zX7F24O4UIFe4SKURQLzkABgAavGH16uYBmweaZUrzvqAKfh76iWBpHvVTwGxAfN1Q/Eo94uQaaWKtijYGWE5wMBYEIbV3RMp1uD1ucpNuAjI1Fg9oo/0zeCGe3UzLC48XCKegW5jca81g37PnujVWV9vXi6Kk020HJ2jChOqK4dHFq8e9k/elTJXywiuIx4QbLWwDBr78vghDcArpKyT0sdTKbcfZyowEfw2P5Db7DQ4aacNsSPAI2IqwXNMmHfMUm2s7mg1YP+C6y1b3Daf8V7qhvyDLHiTeijVVbXTNrp9XVHlJrQipoMPz17fd1H6MY/Bnu8bqwSfIP8kf9XXNNUhs7Y8gRH9punv0Xx6bvqLcYWkw=
+  on:
+    tags: true
+    repo: otamachan/aws-sdk-cpp-build
